@@ -1,9 +1,13 @@
 import express from "express";
-import path from "path"; // To handle file paths
-import router from "./routes/routes.js"; // Import routes
+import path from "path";
+import { fileURLToPath } from "url"; // Import to convert URL to path
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Get the current directory using import.meta.url
+const __filename = fileURLToPath(import.meta.url); // Get the current file path
+const __dirname = path.dirname(__filename); // Get the directory name
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, "public")));
@@ -12,7 +16,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Use the dynamic router
+// Use the dynamic router (assuming it's defined elsewhere)
+import router from "./routes/routes.js";
 app.use("/", router);
 
 // 404 handler (if route doesn't match)
