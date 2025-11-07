@@ -1,8 +1,13 @@
+// index.js
 import express from "express";
-import router from "./routes.js";
+import path from "path"; // To handle file paths
+import router from "./routes/routes.js"; // Import routes
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware
 app.use(express.json());
@@ -24,7 +29,7 @@ app.use((err, req, res, next) => {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
 
 export default app;
