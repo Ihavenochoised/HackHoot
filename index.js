@@ -1,4 +1,3 @@
-// index.js
 import express from "express";
 import path from "path"; // To handle file paths
 import router from "./routes/routes.js"; // Import routes
