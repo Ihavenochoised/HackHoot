@@ -1,0 +1,29 @@
+[
+    {
+        "method": "get",
+        "path": "/",
+        "response": "Welcome to my app 👋"
+    },
+    {
+        "method": "get",
+        "path": "/about",
+        "response": "About this app 🧠"
+    },
+    {
+        "method": "get",
+        "path": "/json",
+        "response": { "message": "This is JSON 💾" },
+        "type": "json"
+    },
+    {
+        "method": "get",
+        "path": "/secret",
+        "response": "Shh... it's a secret 🤫"
+    },
+    {
+        "method": "get",
+        "path": "/dynamic",
+        "response": "Dynamic content 👾",
+        "type": "function"
+    }
+]
