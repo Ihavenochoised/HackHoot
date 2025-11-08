@@ -1,32 +1,21 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 
 const router = express.Router();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.join(__dirname, "..", "public", "pages");
 
-// Load routes from routes.json
-const routes = JSON.parse(fs.readFileSync("./routes/routes.json", "utf8"));
+// Load routes from JSON
+const routesFile = path.join(__dirname, "routes.json");
+const routes = JSON.parse(fs.readFileSync(routesFile, "utf-8"));
 
-// Dynamically register routes
-routes.forEach((r) => {
-    const method = r.method.toLowerCase();
-    
-    // Handle GET, POST, etc. dynamically
-    if (typeof router[method] === "function") {
-        router[method](r.path, (req, res) => {
-            if (r.type === "json") {
-                // Respond with JSON
-                res.json(r.response);
-            } else if (r.type === "function") {
-                // Call a function (you can expand this logic)
-                res.send(r.response + " (Dynamic content!)");
-            } else {
-                // Default response (text)
-                res.send(r.response);
-            }
-        });
-    } else {
-        console.warn(`⚠️ Unsupported method: ${r.method} for path: ${r.path}`);
-    }
-});
+// Generate routes automatically
+for (const [routePath, pageFile] of Object.entries(routes)) {
+    router.get(routePath, (req, res) => {
+        res.sendFile(path.join(root, pageFile));
+    });
+}
 
 export default router;
