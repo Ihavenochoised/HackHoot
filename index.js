@@ -1,20 +1,24 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import router from "./routes/routes.js";
+import pageRouter from "./routes/routes.js";
+import apiRouter from "./routes/api.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Middleware
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Use your custom routes file
-app.use("/", router);
+// 🧩 Routers
+app.use("/", pageRouter);
+app.use("/api", apiRouter);
 
-// 404 fallback (for missing files or routes)
+// 404 fallback
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, "public/pages/404/index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🔥 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
