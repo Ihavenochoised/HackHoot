@@ -5,7 +5,7 @@ import fs from "fs";
 
 const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, "..", "public", "pages");
+const root = path.join(__dirname, "..", "public");
 
 // Load routes from JSON
 const routesFile = path.join(__dirname, "routes.json");
