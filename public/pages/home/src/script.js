@@ -2,7 +2,7 @@ import { haptic } from '/modules/haptics/haptics.js';
 document.addEventListener('readystatechange', checkReady);
 
 let answersGotten = false;
-const proxyServerAddress = 'https://api.allorigins.win/get?url=';
+const proxyServerAddress = 'proxy';
 let kahootContent;
 const input = document.querySelector('#kahootHash');
 const start = document.querySelector('#start');
@@ -48,10 +48,10 @@ function checkReady() {
 }
 async function getAnswers() {
 	console.log('Process started...');
-	const url = `https://kahoot.it/rest/kahoots/${input.value.toLowerCase()}`;
-	result.innerHTML = await gettingAnswers(url);
+	const UUID = input.value.toLowerCase();
+	result.innerHTML = await gettingAnswers(UUID);
 }
-async function gettingAnswers(url) {
+async function gettingAnswers(UUID) {
 	if (answersGotten) {
 		haptic.error();
 		return;
@@ -66,15 +66,15 @@ async function gettingAnswers(url) {
 	resultContainer.appendChild(result);
 
 	start.appendChild(loading);
-	if (url === 'https://kahoot.it/rest/kahoots/') {
+	if (!UUID) {
 		haptic.error();
 		return '❌ Error: Please enter a Kahoot Hash above';
 	}
 
-	console.log('Combined URL:', url);
+	console.log('Kahoot UUID to fetch: ', UUID);
 
 	const response = await (
-		await fetch(`${proxyServerAddress}${encodeURIComponent(url)}`)
+		await fetch(`${proxyServerAddress}?UUID=${UUID}`)
 	).json();
 
 	console.log(response);
