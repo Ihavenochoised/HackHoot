@@ -1,4 +1,4 @@
-import { haptic } from '../modules/haptics/haptics.js';
+import { haptic } from '/modules/haptics/haptics.js';
 document.addEventListener('readystatechange', checkReady);
 
 let answersGotten = false;
