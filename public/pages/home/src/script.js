@@ -1,4 +1,6 @@
-import { haptic } from '/modules/haptics/haptics.js';
+document.write('test')
+
+/*import { haptic } from '/modules/haptics/haptics.js';
 document.addEventListener('readystatechange', checkReady);
 
 let answersGotten = false;
@@ -188,4 +190,4 @@ function downloadPDF(element) {
 // Botter
 const botStart = document.querySelector('#botStart');
 botStart.addEventListener('click', startBotting);
-function startBotting() {}
+function startBotting() {}*/
