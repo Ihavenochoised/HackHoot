@@ -15,6 +15,7 @@
 	border-radius: 10px;
 	font-family: 'Luckiest Guy', sans-serif;
 	-webkit-tap-highlight-color: transparent;
+	box-sizing: border-box;
 }
 
 body {
