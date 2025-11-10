@@ -8,7 +8,7 @@ const input = document.querySelector('#kahootHash');
 const start = document.querySelector('#start');
 const loading = document.createElement('span');
 loading.src =
-	'https://ihavenochoised.github.io/tiantianassets/kahootcheats/loading.gif';
+	'/files/assets/loadingIcon.gif';
 const resultContainer = document.createElement('div');
 resultContainer.classList.add('mainContainer');
 const expandResultContainer = document.createElement('div');
@@ -32,7 +32,7 @@ start.addEventListener('click', getAnswers);
 
 input.value = 'd4112b19-199b-46a8-93ab-9dc87619fb37';
 
-// Get Answers by Hash
+// Get Answers by UUID
 function checkReady() {
 	console.log(document.readyState);
 	if (document.readyState === 'complete') {
