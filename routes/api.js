@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const router = express.Router();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const filesDir = path.join(__dirname, '..', 'public', 'files');
+const filesDir = path.join(__dirname, '..', 'public');
 
 router.get('/', (req, res) => {
     res.json({ message: 'Welcome to the API 🚀' });
@@ -19,16 +19,20 @@ router.post('/proxy', (req, res) => {
     proxyRequest(req, res);
 });
 
+router.post('/convert-pdf', (req, res))
+
 // ------------- API FUNCTIONS -------------
+
+import puppeteer from 'puppeteer';
 
 async function proxyRequest(req, res) {
     try {
-        // Target API URL (replace with actual endpoint)
-        const externalApiURL = 'https://kahoot.it/rest/kahoots/';
-        const combinedURL = externalApiURL + req.body.UUID;
-
+        const { UUID } = req.body;
+        if (!UUID) return res.status(400).json({ error: "missing UUID in body" });
+        
         // Make the request to the external API (could be a POST, GET, etc.)
-        const externalApiResponse = await fetch(combinedURL);
+        const externalApiURL = 'https://kahoot.it/rest/kahoots/';
+        const externalApiResponse = await fetch(externalApiURL + UUID);
         const responseBody = await externalApiResponse.json();
         externalApiResponse.headers.forEach((value, name) => {
             res.setHeader(name, value);  // Forward each header from the external API to the client
