@@ -7,8 +7,6 @@ const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const filesDir = path.join(__dirname, '..', 'public');
 
-app.use(express.json());  // Parse JSON bodies in requests
-
 router.get('/', (req, res) => {
     res.json({ message: 'Welcome to the API 🚀' });
 });
