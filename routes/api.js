@@ -40,9 +40,6 @@ async function proxyRequest(req, res) {
             throw new Error(`External API returned error: ${externalApiResponse.statusText}`);
         }
         const responseBody = await externalApiResponse.json();
-        externalApiResponse.headers.forEach((value, name) => {
-            res.setHeader(name, value);  // Forward each header from the external API to the client
-        });
         // Send back the body from the external API
         res.status(externalApiResponse.status).json(responseBody);
     } catch (err) {
