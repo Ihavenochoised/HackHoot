@@ -14,11 +14,11 @@ router.get('/', (req, res) => {
 router.post('/proxy', async (req, res) => {
     try {
         // Target API URL (replace with actual endpoint)
-        const externalApiUrl = 'https://kahoot.it/rest/kahoots/'; 
+        const externalApiURL = 'https://kahoot.it/rest/kahoots/'; 
         const combinedURL = externalApiURL + req.body.UUID;
         
         // Make the request to the external API (could be a POST, GET, etc.)
-        const externalApiResponse = await fetch(externalApiUrl);
+        const externalApiResponse = await fetch(combinedURL);
         const responseBody = await externalApiResponse.json();
         externalApiResponse.headers.forEach((value, name) => {
             res.setHeader(name, value);  // Forward each header from the external API to the client
