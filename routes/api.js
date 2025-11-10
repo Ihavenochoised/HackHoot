@@ -15,9 +15,9 @@ router.get('/status', (req, res) => {
     res.json({ uptime: process.uptime(), status: 'OK', time: new Date() });
 });
 
-router.post('/proxyKahoot', (req, res) => {
+router.post('/kahootProxy', (req, res) => {
     console.log('Request body:', req.body);  // To check if you’re receiving the data correctly
-    proxyKahootRequest(req, res);
+    proxyRequest(req, res);
 });
 
 router.post('/convert-pdf', (req, res) => {
