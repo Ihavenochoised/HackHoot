@@ -7,6 +7,8 @@ const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const filesDir = path.join(__dirname, '..', 'public');
 
+app.use(express.json());  // Parse JSON bodies in requests
+
 router.get('/', (req, res) => {
     res.json({ message: 'Welcome to the API 🚀' });
 });
@@ -35,6 +37,9 @@ async function proxyRequest(req, res) {
         // Make the request to the external API (could be a POST, GET, etc.)
         const externalApiURL = 'https://kahoot.it/rest/kahoots/';
         const externalApiResponse = await fetch(externalApiURL + UUID);
+        if (!externalApiResponse.ok) {
+            throw new Error(`External API returned error: ${externalApiResponse.statusText}`);
+        }
         const responseBody = await externalApiResponse.json();
         externalApiResponse.headers.forEach((value, name) => {
             res.setHeader(name, value);  // Forward each header from the external API to the client
@@ -47,9 +52,26 @@ async function proxyRequest(req, res) {
     }
 }
 
-async function htmlToPDF (req, res) {
-    // Implement functionality
-} 
+async function htmlToPDF(req, res) {
+    const { htmlContent } = req.body;  // Assuming the HTML is passed in the request body
+    if (!htmlContent) {
+        return res.status(400).json({ error: 'No HTML content provided' });
+    }
+    
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setContent(htmlContent);  // Set the HTML content
+        const pdfBuffer = await page.pdf();  // Generate the PDF
+        await browser.close();
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.send(pdfBuffer);  // Send the PDF back to the client
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        res.status(500).json({ error: 'Failed to generate PDF' });
+    }
+}
 
 function joinKahoot() {
     // Implement functionality
