@@ -1,4 +1,4 @@
-//import { //haptic } from '/modules///haptics///haptics.js';
+import { haptic } from '/modules/haptics/haptics.js';
 document.addEventListener('readystatechange', checkReady);
 
 let answersGotten = false;
@@ -34,7 +34,6 @@ input.value = 'd4112b19-199b-46a8-93ab-9dc87619fb37';
 
 // Get Answers by UUID
 function checkReady() {
-	alert(`Ready State: ${document.readyState}`)
 	console.log(document.readyState);
 	if (document.readyState === 'complete') {
 		setTimeout(function () {
@@ -54,10 +53,10 @@ async function getAnswers() {
 }
 async function gettingAnswers(UUID) {
 	if (answersGotten) {
-		//haptic.error();
+		haptic.error();
 		return;
 	}
-	//haptic();
+	haptic();
 	document.body.appendChild(resultContainer);
 	expandResultContainer.appendChild(expandResultBtn);
 	downloadPDFContainer.appendChild(downloadPDFBtn);
@@ -68,7 +67,7 @@ async function gettingAnswers(UUID) {
 
 	start.appendChild(loading);
 	if (!UUID) {
-		//haptic.error();
+		haptic.error();
 		return '❌ Error: Please enter a Kahoot Hash above';
 	}
 
@@ -87,13 +86,13 @@ async function gettingAnswers(UUID) {
 		if (kahootContent.error === 'FORBIDDEN')
 			throw new Error('❌ Error: Cannot get private Kahoot');
 	} catch (error) {
-		//haptic.error();
+		haptic.error();
 		return error.message;
 	}
 
 	// At this point the returned result has passed all checks
 	answersGotten = true;
-	//haptic.confirm();
+	haptic.confirm();
 
 	start.style.backgroundImage = 'linear-gradient(0deg, #6b7280, #9ca3af)';
 
@@ -150,7 +149,7 @@ async function gettingAnswers(UUID) {
 	return '✅ Success';
 }
 function showRaw() {
-	//haptic();
+	haptic();
 	const jsonBlob = new Blob(
 		[JSON.stringify(kahootContent, null, 2)], // Pretty-print it by default
 		{ type: 'application/json' }
