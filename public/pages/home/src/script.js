@@ -74,7 +74,7 @@ async function gettingAnswers(UUID) {
 	console.log('Kahoot UUID to fetch: ', UUID);
 
 	const response = await (
-		await fetch(UUID, {
+		await fetch(`${proxyServerAddress}?UUID=${UUID}`, {
         	method: "POST",
         	headers: {
         	    "Content-Type": "application/json",
