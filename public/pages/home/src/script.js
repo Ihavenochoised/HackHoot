@@ -2,7 +2,7 @@ import { haptic } from '/modules/haptics/haptics.js';
 document.addEventListener('readystatechange', checkReady);
 
 let answersGotten = false;
-const proxyServerAddress = 'proxy';
+const proxyServerAddress = '/api/proxy';
 let kahootContent;
 const input = document.querySelector('#kahootHash');
 const start = document.querySelector('#start');
