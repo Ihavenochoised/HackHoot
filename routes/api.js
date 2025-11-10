@@ -15,13 +15,13 @@ router.get('/status', (req, res) => {
     res.json({ uptime: process.uptime(), status: 'OK', time: new Date() });
 });
 
-router.post('/proxy', async (req, res) => {
+router.post('/proxy', (req, res) => {
     proxyRequest(req, res);
 });
 
 // ------------- API FUNCTIONS -------------
 
-function proxyRequest(req, res) {
+async function proxyRequest(req, res) {
     try {
         // Target API URL (replace with actual endpoint)
         const externalApiURL = 'https://kahoot.it/rest/kahoots/';
