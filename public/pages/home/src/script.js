@@ -74,13 +74,13 @@ async function gettingAnswers(UUID) {
 	console.log('Kahoot UUID to fetch: ', UUID);
 
 	const response = await (
-		const res = await fetch(UUID, {
+		await fetch(UUID, {
         	method: "POST",
         	headers: {
         	    "Content-Type": "application/json",
         	},
        	 	body: JSON.stringify({ UUID: UUID }),
-    	});
+    	})
 	).json();
 
 	console.log(response);
