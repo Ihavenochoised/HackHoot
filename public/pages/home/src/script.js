@@ -2,7 +2,7 @@ import { haptic } from '/modules/haptics/haptics.js';
 document.addEventListener('readystatechange', checkReady);
 
 let answersGotten = false;
-const proxyServerAddress = '/api/proxy';
+const proxyServerAddress = '/api/kahootProxy';
 let kahootContent;
 const input = document.querySelector('#kahootHash');
 const start = document.querySelector('#start');
@@ -74,7 +74,13 @@ async function gettingAnswers(UUID) {
 	console.log('Kahoot UUID to fetch: ', UUID);
 
 	const response = await (
-		await fetch(`${proxyServerAddress}?UUID=${UUID}`)
+		const res = await fetch(UUID, {
+        	method: "POST",
+        	headers: {
+        	    "Content-Type": "application/json",
+        	},
+       	 	body: JSON.stringify({ UUID: UUID }),
+    	});
 	).json();
 
 	console.log(response);
