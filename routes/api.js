@@ -15,7 +15,7 @@ router.get('/status', (req, res) => {
     res.json({ uptime: process.uptime(), status: 'OK', time: new Date() });
 });
 
-router.post('/proxy', (req, res) => {
+router.post('/kahootProxy', (req, res) => {
     proxyRequest(req, res);
 });
 
