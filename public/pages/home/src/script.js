@@ -34,6 +34,7 @@ input.value = 'd4112b19-199b-46a8-93ab-9dc87619fb37';
 
 // Get Answers by UUID
 function checkReady() {
+	alert(`Ready State: ${document.readyState}`)
 	console.log(document.readyState);
 	if (document.readyState === 'complete') {
 		setTimeout(function () {
