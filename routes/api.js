@@ -19,7 +19,9 @@ router.post('/kahootProxy', (req, res) => {
     proxyRequest(req, res);
 });
 
-router.post('/convert-pdf', (req, res))
+router.post('/convert-pdf', (req, res) => {
+    htmlToPDF(req, res);
+});
 
 // ------------- API FUNCTIONS -------------
 
@@ -44,6 +46,10 @@ async function proxyRequest(req, res) {
         res.status(500).json({ error: 'Proxy request failed' });
     }
 }
+
+async function htmlToPDF (req, res) {
+    // Implement functionality
+} 
 
 function joinKahoot() {
     // Implement functionality
