@@ -22,24 +22,3 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-
-import { exec } from 'child_process';
-
-// Function to execute a shell command and log the result
-function findChromium() {
-    exec('find / -name "chromium*" 2>/dev/null', (error, stdout, stderr) => {
-        if (error) {
-            console.error(`exec error: ${error}`);
-            return;
-        }
-        if (stderr) {
-            console.error(`stderr: ${stderr}`);
-            return;
-        }
-        console.log(`Chromium locations found: ${stdout}`);
-    });
-}
-
-// Call the function to search for Chromium
-findChromium();
-
