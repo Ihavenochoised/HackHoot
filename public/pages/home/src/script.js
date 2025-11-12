@@ -154,6 +154,7 @@ async function downloadPDF(element, { filename = 'document.pdf', openInNewTab = 
         haptic.error();
         return;
 	}
+	haptic();
     requestPending = true;
     const payload = '<link rel="stylesheet" href="https://hackhoot.onrender.com/stylesheet/style.css" />' + element.outerHTML;
     try {
