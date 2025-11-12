@@ -53,6 +53,7 @@ async function htmlToPDF(req, res) {
     if (!htmlContent) {
         return res.status(400).json({ error: 'No HTML content provided' });
     }
+    console.log('HTML Content Recieved: ', htmlContent);
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
