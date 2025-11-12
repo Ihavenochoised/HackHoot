@@ -26,7 +26,7 @@ downloadPDFBtn.innerHTML = 'Export as PDF (Broken)';
 
 expandResultBtn.addEventListener('click', showRaw);
 downloadPDFBtn.addEventListener('click', function () {
-	downloadPDF(downloadableContent, kahootContent.title);
+	downloadPDF(downloadableContent, { filename: kahootContent.title, openInNewTab: true });
 });
 start.addEventListener('click', getAnswers);
 
@@ -151,13 +151,11 @@ function showRaw() {
 }
 async function downloadPDF(element, { filename = 'document.pdf', openInNewTab = false } = {}) {
     if (requestPending) {
-        haptic.error?.();
+        haptic.error();
         return;
 	}
     requestPending = true;
-
-    const payload = '<link rel="stylesheet" href="/stylesheet/style.css" />' + element.outerHTML;
-
+    const payload = '<link rel="stylesheet" href="https://hackhoot.onrender.com/stylesheet/style.css" />' + element.outerHTML;
     try {
         console.log('Waiting for hackhoot backend to respond...');
         const resp = await fetch('/api/convert-pdf', {
@@ -165,41 +163,29 @@ async function downloadPDF(element, { filename = 'document.pdf', openInNewTab = 
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/pdf' },
             body: JSON.stringify({ htmlContent: payload })
         });
-
         if (!resp.ok) {
-            // read error text if available
             const text = await resp.text().catch(() => null);
             console.error('PDF generation failed:', resp.status, text);
-            haptic.error?.();
+            haptic.error();
             throw new Error(`PDF generation failed: ${resp.status}`);
         }
-
         const pdfBlob = await resp.blob();
         const pdfUrl = URL.createObjectURL(pdfBlob);
-
         if (openInNewTab) {
-            // open in new tab (viewer)
             window.open(pdfUrl, '_blank');
-            // revoke later to avoid breaking the viewer immediately; give user time to load
-            setTimeout(() => URL.revokeObjectURL(pdfUrl), 60_000);
+            setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
         } else {
-            // force download with controlled filename
             const a = document.createElement('a');
             a.href = pdfUrl;
-            a.download = filename;
-            // Firefox requires adding the link to DOM
-            document.body.appendChild(a);
+			a.download = filename;
+            document.body.appendChild(a); // For FireFox users
             a.click();
             a.remove();
-
-            // revoke after short delay to ensure download started
-            setTimeout(() => URL.revokeObjectURL(pdfUrl), 10_000);
+            setTimeout(() => URL.revokeObjectURL(pdfUrl), 10000);
         }
-
-        haptic.success?.();
+        haptic.confirm();
     } catch (err) {
         console.error('Error downloading PDF:', err);
-        // Optionally show a user-friendly message here
     } finally {
         requestPending = false;
     }
