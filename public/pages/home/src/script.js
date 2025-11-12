@@ -86,7 +86,7 @@ async function gettingAnswers(UUID) {
 	console.log(response);
 
 	try {
-		kahootContent = JSON.parse(response.contents);
+		kahootContent = JSON.parse(response);
 		if (kahootContent.error === 'INVALID_DATA')
 			throw new Error('❌ Error: Please enter a valid Kahoot hash');
 		if (kahootContent.error === 'FORBIDDEN')
