@@ -84,6 +84,7 @@ async function gettingAnswers(UUID) {
 	).json();
 
 	console.log(response);
+	alert(response)
 
 	try {
 		kahootContent = JSON.parse(response);
