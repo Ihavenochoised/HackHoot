@@ -3,7 +3,6 @@ document.addEventListener('readystatechange', checkReady);
 
 let answersGotten = false;
 const proxyServerAddress = '/api/kahootProxy';
-let kahootContent;
 const input = document.querySelector('#kahootHash');
 const start = document.querySelector('#start');
 const loading = document.createElement('span');
@@ -72,7 +71,7 @@ async function gettingAnswers(UUID) {
 
 	console.log('Kahoot UUID to fetch: ', UUID);
 
-	const response = await (
+	const kahootContent = await (
 		await fetch(proxyServerAddress, {
         	method: "POST",
         	headers: {
@@ -82,11 +81,9 @@ async function gettingAnswers(UUID) {
     	})
 	).json();
 
-	console.log(response);
-	alert(response)
+	console.log(kahootContent);
 
 	try {
-		kahootContent = JSON.parse(response);
 		if (kahootContent.error === 'INVALID_DATA')
 			throw new Error('❌ Error: Please enter a valid Kahoot hash');
 		if (kahootContent.error === 'FORBIDDEN')
@@ -99,31 +96,21 @@ async function gettingAnswers(UUID) {
 	// At this point the returned result has passed all checks
 	answersGotten = true;
 	haptic.confirm();
-
 	start.style.backgroundImage = 'linear-gradient(0deg, #6b7280, #9ca3af)';
-
 	quizTitle.innerHTML = `<span>Answers to: ${kahootContent.title}</span>`;
-
 	console.log(kahootContent);
 	console.log('List of questions:');
-
 	let questionNumber = 0;
-
 	downloadableContent.removeAttribute('hidden');
 	kahootContent.questions.forEach(function (question) {
 		questionNumber++;
-
-		// 🧱 Create fresh DOM elements per question!
 		const answerBlockEl = document.createElement('div');
 		const questionEl = document.createElement('h3');
 		const answerEl = document.createElement('p');
-
 		answerBlockEl.appendChild(questionEl);
 		answerBlockEl.appendChild(answerEl);
 		answerBlockEl.classList.add('mainContainer');
 		answerBlockEl.classList.add('no-break');
-
-		// 🎯 Set content
 		if (question.type === 'content') {
 			console.log(`Content ${questionNumber}: ${question.title}`);
 			questionEl.innerHTML = `Question ${questionNumber}: <span>${
@@ -135,8 +122,6 @@ async function gettingAnswers(UUID) {
 			questionEl.innerHTML = `Question ${questionNumber}: <span>${
 				question.question
 			}</span><br>[${question.time / 1000} Seconds]`;
-
-			// ✅ Find the correct answer(s)
 			const correctAnswers =
 				question.choices
 					?.filter(choice => choice.correct)
