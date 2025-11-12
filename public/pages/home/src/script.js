@@ -2,7 +2,8 @@ import { haptic } from '/modules/haptics/haptics.js';
 document.addEventListener('readystatechange', checkReady);
 
 let answersGotten = false;
-const proxyServerAddress = '/api/kahootProxy';
+let requestPending = false;
+const proxyServerAddress = '/api/kahoot-proxy';
 const input = document.querySelector('#kahootHash');
 const start = document.querySelector('#start');
 const loading = document.createElement('span');
@@ -149,31 +150,20 @@ function showRaw() {
 	window.open(url, '_blank');
 }
 function downloadPDF(element) {
-	downloadPDFBtn.disabled = true;
-	const gradientTextSpans = document.querySelectorAll('span');
-	console.log("Converting gradient text to html2pdf's readable version...");
-	gradientTextSpans.forEach(span => {
-		span.classList.add('pdf-friendly-text');
-	});
-	html2pdf()
-		.set({
-			margin: 0,
-			filename: `${kahootContent.title}.pdf`,
-			image: { type: 'jpeg', quality: 1 },
-			html2canvas: { scale: 2 },
-			jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-			pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-		})
-		.from(element)
-		.save();
-	console.log('Waiting for html2pdf to take snapshot...');
-	setTimeout(function () {
-		gradientTextSpans.forEach(span => {
-			span.classList.remove('pdf-friendly-text');
-		});
-		console.log('Reverting fonts');
-		downloadPDFBtn.disabled = false;
-	}, 1000);
+	if (requestPending) {
+		haptic.error();
+		return;
+	}
+	requestPending = true;
+	const payload = '<link rel="stylesheet" href="/stylesheet/style.css" />' + element.outerHTML;
+	console.log('Waiting for hackhoot backend to respond...');
+	fetch('/api/convert-pdf', {
+    	method: "POST",
+        headers: {
+        	"Content-Type": "application/json",
+        },
+       	body: JSON.stringify({ htmlContent: payload }),
+    })
 }
 
 // Botter

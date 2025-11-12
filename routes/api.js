@@ -15,7 +15,7 @@ router.get('/status', (req, res) => {
     res.json({ uptime: process.uptime(), status: 'OK', time: new Date() });
 });
 
-router.post('/kahootProxy', (req, res) => {
+router.post('/kahoot-proxy', (req, res) => {
     console.log('Request body:', req.body);  // To check if you’re receiving the data correctly
     proxyRequest(req, res);
 });
@@ -49,20 +49,19 @@ async function proxyRequest(req, res) {
 }
 
 async function htmlToPDF(req, res) {
-    const { htmlContent } = req.body;  // Assuming the HTML is passed in the request body
+    const { htmlContent } = req.body; 
     if (!htmlContent) {
         return res.status(400).json({ error: 'No HTML content provided' });
     }
-    
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        await page.setContent(htmlContent);  // Set the HTML content
-        const pdfBuffer = await page.pdf();  // Generate the PDF
+        await page.setContent(htmlContent);  
+        const pdfBuffer = await page.pdf();  
         await browser.close();
 
         res.setHeader('Content-Type', 'application/pdf');
-        res.send(pdfBuffer);  // Send the PDF back to the client
+        res.send(pdfBuffer);  
     } catch (error) {
         console.error('Error generating PDF:', error);
         res.status(500).json({ error: 'Failed to generate PDF' });
