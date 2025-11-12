@@ -22,7 +22,7 @@ const result = document.createElement('p');
 const quizTitle = document.querySelector('#quizTitle');
 const downloadableContent = document.querySelector('#downloadableContent');
 const downloadPDFBtn = document.createElement('button');
-downloadPDFBtn.innerHTML = 'Export as PDF (Broken)';
+downloadPDFBtn.innerHTML = 'Export as PDF (Beta)';
 
 expandResultBtn.addEventListener('click', showRaw);
 downloadPDFBtn.addEventListener('click', function () {
