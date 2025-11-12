@@ -50,6 +50,7 @@ async function getAnswers() {
 	const UUID = input.value.toLowerCase();
 	result.innerHTML = await gettingAnswers(UUID);
 }
+let kahootContent;
 async function gettingAnswers(UUID) {
 	if (answersGotten) {
 		haptic.error();
@@ -72,7 +73,7 @@ async function gettingAnswers(UUID) {
 
 	console.log('Kahoot UUID to fetch: ', UUID);
 
-	const kahootContent = await (
+	kahootContent = await (
 		await fetch(proxyServerAddress, {
         	method: "POST",
         	headers: {
