@@ -60,9 +60,6 @@ async function htmlToPDF(req, res) {
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-gpu',
-                '--no-zygote'
             ]
         });
         const page = await browser.newPage();
