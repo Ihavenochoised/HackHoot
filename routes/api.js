@@ -7,15 +7,15 @@ const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const filesDir = path.join(__dirname, '..', 'public');
 
-router.get('/', (req, res) => {
+router.get('/', express.json(), (req, res) => {
     res.json({ message: 'Welcome to the API 🚀' });
 });
 
-router.get('/status', (req, res) => {
+router.get('/status', express.json(), (req, res) => {
     res.json({ uptime: process.uptime(), status: 'OK', time: new Date() });
 });
 
-router.post('/kahoot-proxy', (req, res) => {
+router.post('/kahoot-proxy', express.json(), (req, res) => {
     console.log('Request body:', req.body);  // To check if you’re receiving the data correctly
     proxyRequest(req, res);
 });
@@ -68,8 +68,7 @@ async function htmlToPDF(req, res) {
         await browser.close();
 
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Length', pdfBuffer.length);
-        res.end(pdfBuffer);
+        res.send(pdfBuffer);
     } catch (error) {
         console.error('Error generating PDF:', error);
         res.status(500).json({ error: 'Failed to generate PDF' });
