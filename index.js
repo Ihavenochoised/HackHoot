@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // 🧩 Routers
 app.use("/", pageRouter);
-app.use("/api", apiRouter, express.json());
+app.use("/api", express.json(), apiRouter);
 
 // 404 fallback
 app.use((req, res) => {
