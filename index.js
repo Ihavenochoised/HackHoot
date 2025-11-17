@@ -8,7 +8,6 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Middleware
-app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // 🧩 Routers
