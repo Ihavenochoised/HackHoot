@@ -20,4 +20,7 @@ else
   cp -R "$PUPPETEER_CACHE_DIR" "$BUILD_CACHE_DIR"
 fi
 
+echo "📍 List of installed dependencies:"
+npm ls
+
 echo "✅️ Dependencies installed, ready to start!"
