@@ -68,7 +68,8 @@ async function htmlToPDF(req, res) {
         await browser.close();
 
         res.setHeader('Content-Type', 'application/pdf');
-        res.send(pdfBuffer);  
+        res.setHeader('Content-Length', pdfBuffer.length);
+        res.end(pdfBuffer);
     } catch (error) {
         console.error('Error generating PDF:', error);
         res.status(500).json({ error: 'Failed to generate PDF' });
