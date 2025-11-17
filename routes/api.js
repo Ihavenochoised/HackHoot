@@ -64,6 +64,9 @@ async function htmlToPDF(req, res) {
         });
         const page = await browser.newPage();
         await page.setContent(htmlContent);  
+        await page.evaluate(async () => {
+            await document.fonts.ready;
+        });
         const pdfBuffer = await page.pdf();  
         await browser.close();
 
