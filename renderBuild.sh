@@ -4,8 +4,6 @@ set -o errexit
 echo "📦 Installing dependencies..."
 npm install
 
-# npm run build
-
 # Puppeteer cache management
 PUPPETEER_CACHE_DIR=".cache/puppeteer"
 BUILD_CACHE_DIR="$XDG_CACHE_HOME/puppeteer"
@@ -21,3 +19,5 @@ else
   mkdir -p "$(dirname $BUILD_CACHE_DIR)"
   cp -R "$PUPPETEER_CACHE_DIR" "$BUILD_CACHE_DIR"
 fi
+
+echo "✅️ Dependencies installed, ready to start!"
