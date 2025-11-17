@@ -63,9 +63,11 @@ async function htmlToPDF(req, res) {
             ]
         });
         const page = await browser.newPage();
-        await page.setContent(htmlContent);  
-        await page.evaluate(async () => {
-            await document.fonts.ready;
+        await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+        await page.evaluate(() => {
+              const base = document.createElement('base');
+              base.href = 'http://localhost:3000/';
+              document.head.appendChild(base);
         });
         const pdfBuffer = await page.pdf();  
         await browser.close();
