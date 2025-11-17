@@ -26,7 +26,7 @@ downloadPDFBtn.innerHTML = 'Export as PDF (Beta)';
 
 expandResultBtn.addEventListener('click', showRaw);
 downloadPDFBtn.addEventListener('click', function () {
-	downloadPDF(downloadableContent, { filename: kahootContent.title, openInNewTab: true });
+	downloadPDF(downloadableContent, { filename: kahootContent.title, openInNewTab: false });
 });
 start.addEventListener('click', getAnswers);
 
