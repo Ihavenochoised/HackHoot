@@ -66,7 +66,7 @@ async function htmlToPDF(req, res) {
         await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
         await page.evaluate(() => {
               const base = document.createElement('base');
-              base.href = 'http://localhost:3000/';
+              base.href = `http://localhost:${process.env.PORT}/`;
               document.head.appendChild(base);
         });
         const pdfBuffer = await page.pdf();  
