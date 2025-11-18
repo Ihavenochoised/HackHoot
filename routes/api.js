@@ -7,7 +7,9 @@ const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const BASE_URL = `${process.env.PUBLIC_URL || "http://localhost:" + (process.env.PORT || 3000)}/`;
-console.log('Base URL used: \n${BASE_URL}\nIf the base URL above is incorrect, stop this process and ammend the code. ')
+console.log(`Base URL used: 
+${BASE_URL}
+If the base URL above is incorrect, stop this process and ammend the code. `)
 
 router.get('/', (req, res) => {
     res.json({ message: 'Welcome to the API 🚀' });
