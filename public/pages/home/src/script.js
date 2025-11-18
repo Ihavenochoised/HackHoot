@@ -162,7 +162,8 @@ async function downloadPDF(element, { filename = 'document.pdf', openInNewTab = 
         console.log('Waiting for hackhoot backend to respond...');
         const resp = await fetch('/api/convert-pdf', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/pdf' },
+            // headers: { 'Content-Type': 'application/json', 'Accept': 'application/pdf' },
+            headers: { 'Content-Type': 'application/json', 'Accept': 'image/png' },
             body: JSON.stringify({ htmlContent: payload })
         });
         if (!resp.ok) {

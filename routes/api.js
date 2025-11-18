@@ -64,6 +64,7 @@ async function htmlToPDF(req, res) {
         });
         const page = await browser.newPage();
         await page.setContent(htmlContent, {
+            waitUntil: 'domcontentloaded',
             url: BASE_URL
         });
 
@@ -71,17 +72,20 @@ async function htmlToPDF(req, res) {
         const { width, height } = await bodyHandle.boundingBox();
         await bodyHandle.dispose();
 
-        await page.setViewport({ width: Math.ceil(width), height: Math.ceil(height) });
+        // await page.setViewport({ width: Math.ceil(width), height: Math.ceil(height) });
 
-        const pdfBuffer = await page.pdf({
-            printBackground: true,
-            width: `${Math.ceil(width)}px`,
-            height: `${Math.ceil(height)}px`,
-            pageRanges: '1',
-        });
+        // const pdfBuffer = await page.pdf({
+        //     printBackground: true,
+        //     width: `${Math.ceil(width)}px`,
+        //     height: `${Math.ceil(height)}px`,
+        //     pageRanges: '1',
+        // });
+        const pdfBuffer = await page.screenshot({ fullPage: true });
+
+        res.set('Content-Type', 'image/png');
         await browser.close();
 
-        res.setHeader('Content-Type', 'application/pdf');
+        // res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Length', pdfBuffer.length);
         res.end(pdfBuffer);
     } catch (error) {
