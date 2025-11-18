@@ -63,7 +63,10 @@ async function htmlToPDF(req, res) {
             ]
         });
         const page = await browser.newPage();
-        await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+        await page.setContent(htmlContent, { 
+            waitUntil: 'networkidle0',
+            url: BASE_URL
+        });
         await page.evaluate((url) => { // Argument url to be yeeeted into the browser
               const base = document.createElement('base');
               base.href = url; // Argument used (Hi Chrome)
