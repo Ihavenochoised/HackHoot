@@ -64,10 +64,22 @@ async function htmlToPDF(req, res) {
         });
         const page = await browser.newPage();
         await page.setContent(htmlContent, { 
-            //waitUntil: 'networkidle0',
+            waitUntil: 'networkidle0',
             url: BASE_URL
         });
-        const pdfBuffer = await page.pdf();  
+
+        const bodyHandle = await page.$('body');
+        const { width, height } = await bodyHandle.boundingBox();
+        await bodyHandle.dispose();
+
+        await page.setViewport({ width: Math.ceil(width), height: Math.ceil(height) });
+
+        const pdfBuffer = await page.pdf({
+            printBackground: true,
+            width: `${Math.ceil(width)}px`,
+            height: `${Math.ceil(height)}px`,
+            pageRanges: '1',
+        });
         await browser.close();
 
         res.setHeader('Content-Type', 'application/pdf');
