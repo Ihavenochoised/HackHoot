@@ -63,8 +63,7 @@ async function htmlToPDF(req, res) {
             ]
         });
         const page = await browser.newPage();
-        await page.setContent(htmlContent, { 
-            waitUntil: 'networkidle0',
+        await page.setContent(htmlContent, {
             url: BASE_URL
         });
 
