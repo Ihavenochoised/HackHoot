@@ -64,7 +64,7 @@ async function htmlToPDF(req, res) {
         });
         const page = await browser.newPage();
         await page.setContent(htmlContent, { 
-            waitUntil: 'networkidle0',
+            //waitUntil: 'networkidle0',
             url: BASE_URL
         });
         const pdfBuffer = await page.pdf();  
