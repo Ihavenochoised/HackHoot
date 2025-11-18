@@ -6,7 +6,7 @@ const router = express.Router();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const BASE_URL = process.env.PUBLIC_URL || `http://localhost:${process.env.PORT || 3000}`;
+const BASE_URL = `${process.env.PUBLIC_URL || `http://localhost:${process.env.PORT || 3000}`}/`;
 console.log('Base URL used: ', BASE_URL, 'If the base URL above is incorrect, stop this process and ammend the code. ')
 
 router.get('/', (req, res) => {
@@ -68,7 +68,7 @@ async function htmlToPDF(req, res) {
               const base = document.createElement('base');
               base.href = url; // Argument used (Hi Chrome)
               document.head.appendChild(base);
-        }, `${BASE_URL}/`); // Passing in the argument, kinda defining the function and running it with the values
+        }, BASE_URL); // Passing in the argument, kinda defining the function and running it with the values
         const pdfBuffer = await page.pdf();  
         await browser.close();
 
