@@ -26,6 +26,7 @@ import puppeteer from 'puppeteer';
 let browser;
 const browserLoaded = (async () => {
     try {
+        console.log('⚠️ Launching browser early...');
         browser = await puppeteer.launch({
             headless: 'new',
             args: [
@@ -38,6 +39,7 @@ const browserLoaded = (async () => {
                 '--no-zygote',
             ]
         });
+        console.log('✅ Browser successfully launched');
         return true;
     } catch (err) {
         console.error(`❌ Fatal error, browser did not launch. Error:`, err);
