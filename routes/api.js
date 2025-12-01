@@ -1,6 +1,4 @@
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 const router = express.Router();
 
@@ -13,7 +11,7 @@ router.get('/status', (req, res) => {
 });
 
 router.post('/kahoot-proxy', (req, res) => {
-    console.log('Request body:', req.body);  
+    console.log('Request body:', req.body);
     proxyRequest(req, res);
 });
 
@@ -24,6 +22,28 @@ router.post('/convert-pdf', (req, res) => {
 // ------------- API FUNCTIONS -------------
 
 import puppeteer from 'puppeteer';
+
+let browser;
+const browserLoaded = (async () => {
+    try {
+        browser = await puppeteer.launch({
+            headless: 'new',
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-extensions',
+                '--disable-gpu',
+                '--single-process',
+                '--no-zygote',
+            ]
+        });
+        return true;
+    } catch (err) {
+        console.error(`❌ Fatal error, browser did not launch. Error:`, err);
+        return false;
+    }
+})();
 
 async function proxyRequest(req, res) {
     try {
@@ -44,6 +64,11 @@ async function proxyRequest(req, res) {
 }
 
 async function htmlToPDF(req, res) {
+    const browserReady = await browserLoaded;
+    if (!browserReady) {
+        console.log('⛔ Browser has not launched, failing the request to /api/convert-pdf');
+        return res.status(503).json({ error: 'The PDF generation service is not ready' });
+    }
     const { htmlContent } = req.body; 
     if (!htmlContent) {
         return res.status(400).json({ error: 'No HTML content provided' });
@@ -60,27 +85,25 @@ async function htmlToPDF(req, res) {
         const page = await browser.newPage();
         await page.setContent(htmlContent, {
             waitUntil: 'domcontentloaded',
-            url: `http://localhost:`
+            url: `http://localhost:${globalThis.PORT}`
         });
 
         const bodyHandle = await page.$('body');
         const { width, height } = await bodyHandle.boundingBox();
         await bodyHandle.dispose();
 
-        // await page.setViewport({ width: Math.ceil(width), height: Math.ceil(height) });
+        await page.setViewport({ width: Math.ceil(width), height: Math.ceil(height) });
 
-        // const pdfBuffer = await page.pdf({
-        //     printBackground: true,
-        //     width: `${Math.ceil(width)}px`,
-        //     height: `${Math.ceil(height)}px`,
-        //     pageRanges: '1',
-        // });
-        const pdfBuffer = await page.screenshot({ fullPage: true });
+        const pdfBuffer = await page.pdf({
+            printBackground: true,
+            width: `${Math.ceil(width)}px`,
+            height: `${Math.ceil(height)}px`,
+            pageRanges: '1',
+        });
 
-        res.set('Content-Type', 'image/png');
-        await browser.close();
+        await page.close();
 
-        // res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Length', pdfBuffer.length);
         res.end(pdfBuffer);
     } catch (error) {
