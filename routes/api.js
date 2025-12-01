@@ -4,13 +4,6 @@ import { fileURLToPath } from 'url';
 
 const router = express.Router();
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const BASE_URL = `${process.env.PUBLIC_URL || "http://localhost:" + (process.env.PORT || 3000)}/`;
-console.log(`Base URL used: 
-${BASE_URL}
-If the base URL above is incorrect, stop this process and ammend the code. `)
-
 router.get('/', (req, res) => {
     res.json({ message: 'Welcome to the API 🚀' });
 });
@@ -20,7 +13,7 @@ router.get('/status', (req, res) => {
 });
 
 router.post('/kahoot-proxy', (req, res) => {
-    console.log('Request body:', req.body);  // To check if you’re receiving the data correctly
+    console.log('Request body:', req.body);  
     proxyRequest(req, res);
 });
 
@@ -67,7 +60,7 @@ async function htmlToPDF(req, res) {
         const page = await browser.newPage();
         await page.setContent(htmlContent, {
             waitUntil: 'domcontentloaded',
-            url: BASE_URL
+            url: `http://localhost:`
         });
 
         const bodyHandle = await page.$('body');
