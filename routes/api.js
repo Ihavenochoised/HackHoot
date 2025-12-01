@@ -19,6 +19,11 @@ router.post('/convert-pdf', (req, res) => {
     htmlToPDF(req, res);
 });
 
+router.post('/browser-pages', (req, res) => {
+    getBrowserPages(req, res);
+})
+// Implement a key later
+
 // ------------- API FUNCTIONS -------------
 
 import puppeteer from 'puppeteer';
@@ -71,19 +76,12 @@ async function htmlToPDF(req, res) {
         console.log('⛔ Browser has not launched, failing the request to /api/convert-pdf');
         return res.status(503).json({ error: 'The PDF generation service is not ready' });
     }
-    const { htmlContent } = req.body; 
+    const { htmlContent } = req.body;
     if (!htmlContent) {
         return res.status(400).json({ error: 'No HTML content provided' });
     }
     console.log('HTML Content Recieved: ', htmlContent);
     try {
-        const browser = await puppeteer.launch({
-            headless: 'new',
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-            ]
-        });
         const page = await browser.newPage();
         await page.setContent(htmlContent, {
             waitUntil: 'domcontentloaded',
@@ -112,6 +110,16 @@ async function htmlToPDF(req, res) {
         console.error('Error generating PDF:', error);
         res.status(500).json({ error: 'Failed to generate PDF' });
     }
+}
+
+async function getBrowserPages(req, res) {
+    const pageObjects = await Promise.all(
+        pages.map(async (page) => ({
+            url: page.url(),
+            title: await page.title()
+        }))
+    );
+    res.json(pageObjects);
 }
 
 function joinKahoot() {
