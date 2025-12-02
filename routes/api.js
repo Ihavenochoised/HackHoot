@@ -27,8 +27,8 @@ router.post('/browser-pages', (req, res) => {
 // ------------- API FUNCTIONS -------------
 
 import puppeteer from 'puppeteer';
-const emojiStylesheet = '<link rel="stylesheet" href="/stylesheets/noto-color-emoji.css" />';
-const siteFontStylesheet = '<link rel="stylesheet" href="/stylesheets/luckiest-guy.css" />';
+const emojiStylesheet = `<link rel="stylesheet" href="http://localhost:${globalThis.PORT}/stylesheets/noto-color-emoji.css" />`;
+const siteFontStylesheet = `<link rel="stylesheet" href="http://localhost:${globalThis.PORT}/stylesheets/luckiest-guy.css" />`;
 
 let browser;
 const browserLoaded = (async () => {
@@ -85,7 +85,7 @@ async function htmlToPDF(req, res) {
     console.log('HTML Content Recieved:', htmlContent);
     htmlContent = emojiStylesheet + htmlContent;
     htmlContent = siteFontStylesheet + htmlContent;
-    console.log('Modified HTML Content Recieved', htmlContent);
+    console.log('Modified HTML Content Recieved:', htmlContent);
     try {
         const page = await browser.newPage();
         await page.setContent(htmlContent, {

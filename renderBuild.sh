@@ -23,4 +23,7 @@ fi
 echo "📍 List of installed dependencies:"
 npm ls
 
+echo "📍 Finding vulnarabilities:"
+npm audit
+
 echo "✅️ Dependencies installed, ready to start!"
