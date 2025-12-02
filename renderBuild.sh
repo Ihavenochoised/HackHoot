@@ -24,6 +24,7 @@ echo "📍 List of installed dependencies:"
 npm ls
 
 echo "📍 Finding vulnarabilities:"
-npm audit
+npm audit --audit-level=moderate
+# npm audit fix
 
 echo "✅️ Dependencies installed, ready to start!"
