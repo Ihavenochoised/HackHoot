@@ -157,7 +157,7 @@ async function downloadPDF(element, { filename = 'document.pdf', openInNewTab = 
 	}
 	haptic();
     requestPending = true;
-    const payload = '<link rel="stylesheet" href="https://hackhoot.onrender.com/stylesheet/style.css" />' + element.outerHTML;
+    const payload = element.innerHTML;
     try {
         console.log('Waiting for hackhoot backend to respond...');
         const resp = await fetch('/api/convert-pdf', {
