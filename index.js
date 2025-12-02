@@ -1,6 +1,10 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+
+const PORT = process.env.PORT || 3000;
+globalThis.PORT = PORT;
+
 import pageRouter from "./routes/routes.js";
 import apiRouter from "./routes/api.js";
 
@@ -19,6 +23,4 @@ app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, "public/pages/404/index.html"));
 });
 
-const PORT = process.env.PORT || 3000;
-globalThis.PORT = PORT;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
