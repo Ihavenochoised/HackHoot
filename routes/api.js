@@ -78,7 +78,7 @@ async function htmlToPDF(req, res) {
         console.log('⛔ Browser has not launched, failing the request to /api/convert-pdf');
         return res.status(503).json({ error: 'The PDF generation service is not ready' });
     }
-    const { htmlContent } = req.body;
+    let { htmlContent } = req.body;
     if (!htmlContent) {
         return res.status(400).json({ error: 'No HTML content provided' });
     }
