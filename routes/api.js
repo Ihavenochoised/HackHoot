@@ -27,8 +27,8 @@ router.post('/browser-pages', (req, res) => {
 // ------------- API FUNCTIONS -------------
 
 import puppeteer from 'puppeteer';
-emojiStylesheet = '<link rel="stylesheet" href="/stylesheets/noto-color-emoji.css" />';
-siteFontStylesheet = '<link rel="stylesheet" href="/stylesheets/luckiest-guy.css" />';
+const emojiStylesheet = '<link rel="stylesheet" href="/stylesheets/noto-color-emoji.css" />';
+const siteFontStylesheet = '<link rel="stylesheet" href="/stylesheets/luckiest-guy.css" />';
 
 let browser;
 const browserLoaded = (async () => {
