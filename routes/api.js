@@ -36,6 +36,7 @@ const browserLoaded = (async () => {
             headless: 'new',
             args: [
                 '--no-sandbox',
+                '--disable-web-security',
                 '--disable-setuid-sandbox',
                 '--disable-dev-shm-usage',
                 '--disable-extensions',
