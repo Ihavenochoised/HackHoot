@@ -118,6 +118,12 @@ async function htmlToPDF(req, res) {
 }
 
 async function getBrowserPages(req, res) {
+    const browserReady = await browserLoaded;
+    if (!browserReady) {
+        console.log('⛔ Browser has not launched, failing the request to /api/browser-pages');
+        return res.status(503).json({ error: 'The browser has not launched' });
+    }
+    const pages = await browser.pages();
     const pageObjects = await Promise.all(
         pages.map(async (page) => ({
             url: page.url(),
