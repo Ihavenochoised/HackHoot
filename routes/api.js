@@ -88,10 +88,13 @@ async function htmlToPDF(req, res) {
     console.log('Modified HTML Content Recieved:', htmlContent);
     try {
         const page = await browser.newPage();
-        await page.setContent(htmlContent, {
-            waitUntil: 'load',
-            url: `http://localhost:${globalThis.PORT}`
+        await page.goto(`http://localhost:${globalThis.PORT}`, {
+            waitUntil: 'load'
         });
+        await page.evaluate(async (html) => {
+            document.documentElement.innerHTML = html;
+            await document.fonts.ready;
+        }, htmlContent);
 
         const bodyHandle = await page.$('body');
         const { width, height } = await bodyHandle.boundingBox();
