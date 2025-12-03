@@ -82,7 +82,7 @@ async function htmlToPDF(req, res) {
         return res.status(400).json({ error: 'No HTML content provided' });
     }
     console.log('HTML Content Recieved:', htmlContent);
-    const emojiStylesheet = `<style>/* luckiest-guy-regular - latin */ @font-face { font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */ font-family: 'Luckiest Guy'; font-style: normal; font-weight: 400; src: url('/files/fonts/luckiest-guy-v25-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */ }</style>`;
+    const emojiStylesheet = ``;
     const siteFontStylesheet = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
