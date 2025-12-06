@@ -27,10 +27,8 @@ async function checkReachable(url) {
     try {
         const res = await fetch(url, { method: "GET" });
 
-        if (res.ok) {
+        if (res) {
             console.log(`[OK] ${url} is reachable`);
-        } else {
-            console.warn(`[WARN] ${url} responded with status ${res.status}`);
         }
     } catch (err) {
         console.warn(`[WARN] Could not reach ${url}, PDF generation may not work as expected`);

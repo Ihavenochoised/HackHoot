@@ -90,6 +90,8 @@ async function htmlToPDF(req, res) {
     `<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
+    const siteStylesheet = 
+    `<link rel="stylesheet" href="/stylesheets/style.css" />`;
 
     const modifiedHTMLContent = 
         `<!DOCTYPE html>
@@ -97,6 +99,7 @@ async function htmlToPDF(req, res) {
             <head>
                 ${emojiStylesheet}
                 ${siteFontStylesheet}
+                ${siteStylesheet}
             </head>
             <body>
                 ${originalHTMLContent}
