@@ -82,10 +82,14 @@ async function htmlToPDF(req, res) {
         return res.status(400).json({ error: 'No HTML content provided' });
     }
     console.log('HTML Content Recieved:', originalHTMLContent);
-    const emojiStylesheet = ``;
-    const siteFontStylesheet = `<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
+    const emojiStylesheet = 
+    `<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">`;
+    const siteFontStylesheet = 
+    `<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
 
     const modifiedHTMLContent = 
         `<!DOCTYPE html>
