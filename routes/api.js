@@ -86,8 +86,17 @@ async function htmlToPDF(req, res) {
     const siteFontStylesheet = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
-    htmlContent = emojiStylesheet + htmlContent;
-    htmlContent = siteFontStylesheet + htmlContent;
+    htmlContent = 
+`<!DOCTYPE html>
+<html lang="en">
+    <head>
+        ${emojiStylesheet}
+        ${siteFontStylesheet}
+    </head>
+    <body>
+        ${htmlContent}
+    </body>
+</hrml>`
     console.log('Modified HTML Content Recieved:', htmlContent);
     try {
         const page = await browser.newPage();
