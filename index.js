@@ -22,3 +22,21 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 globalThis.PORT = PORT;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+async function checkReachable(url) {
+    try {
+        const res = await fetch(url, { method: "GET" });
+
+        if (res.ok) {
+            console.log(`[OK] ${url} is reachable`);
+        } else {
+            console.warn(`[WARN] ${url} responded with status ${res.status}`);
+        }
+    } catch (err) {
+        console.warn(`[WARN] Could not reach ${url}, PDF generation may not work as expected`);
+    }
+}
+
+// Run checks at startup
+checkReachable("https://fonts.gstatic.com");
+checkReachable("https://fonts.googleapis.com");

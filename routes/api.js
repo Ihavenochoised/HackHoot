@@ -77,27 +77,29 @@ async function htmlToPDF(req, res) {
         console.log('⛔ Browser has not launched, failing the request to /api/convert-pdf');
         return res.status(503).json({ error: 'The PDF generation service is not ready' });
     }
-    let { htmlContent } = req.body;
-    if (!htmlContent) {
+    const { htmlContent: originalHTMLContent } = req.body;
+    if (!originalHTMLContent) {
         return res.status(400).json({ error: 'No HTML content provided' });
     }
-    console.log('HTML Content Recieved:', htmlContent);
+    console.log('HTML Content Recieved:', originalHTMLContent);
     const emojiStylesheet = ``;
     const siteFontStylesheet = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
-    htmlContent = 
-`<!DOCTYPE html>
-<html lang="en">
-    <head>
-        ${emojiStylesheet}
-        ${siteFontStylesheet}
-    </head>
-    <body>
-        ${htmlContent}
-    </body>
-</hrml>`
-    console.log('Modified HTML Content Recieved:', htmlContent);
+
+    const modifiedHTMLContent = 
+        `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                ${emojiStylesheet}
+                ${siteFontStylesheet}
+            </head>
+            <body>
+                ${originalHTMLContent}
+            </body>
+        </html>`
+
+    console.log('Modified HTML Content:', modifiedHTMLContent);
     try {
         const page = await browser.newPage();
         await page.goto(`http://localhost:${globalThis.PORT}`, {
@@ -106,7 +108,8 @@ async function htmlToPDF(req, res) {
         await page.evaluate(async (html) => {
             document.documentElement.innerHTML = html;
             await document.fonts.ready;
-        }, htmlContent);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }, modifiedHTMLContent);
 
         const bodyHandle = await page.$('body');
         const { width, height } = await bodyHandle.boundingBox();
