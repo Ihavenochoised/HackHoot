@@ -130,7 +130,7 @@ async function gettingAnswers(UUID) {
 					.map(choice => choice.answer)
 					.join(', ') || 'No Correct Answer';
 
-			answerEl.innerHTML = `✅ Correct Answer: ${correctAnswers}`;
+			answerEl.innerHTML = `<span class="emoji">✅</span> Correct Answer: ${correctAnswers}`;
 		}
 
 		downloadableContent.appendChild(answerBlockEl);
@@ -139,7 +139,7 @@ async function gettingAnswers(UUID) {
 		behavior: 'smooth', // or "auto"
 		block: 'start', // or "center", "end", "start", "nearest"
 	});
-	return '✅ Success';
+	return '<span class="emoji">✅</span> Success';
 }
 function showRaw() {
 	haptic();

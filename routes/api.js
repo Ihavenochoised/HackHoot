@@ -115,7 +115,7 @@ async function htmlToPDF(req, res) {
         await page.evaluate(async (html) => {
             document.documentElement.innerHTML = html;
             await document.fonts.ready;
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            //await new Promise(resolve => setTimeout(resolve, 1000));
         }, modifiedHTMLContent);
 
         const bodyHandle = await page.$('body');

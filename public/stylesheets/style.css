@@ -38,10 +38,8 @@ span {
 	margin: 20px auto;
 }
 
-.pdf-friendly-text {
-	background-image: none !important;
-	color: #243ae7 !important;
-	background-color: transparent !important;
+.emoji {
+	font-family: 'Noto Color Emoji' !important;
 }
 
 /* Containers */
@@ -76,12 +74,6 @@ div {
 .warning * {
 	margin: 0 !important;
 }
-
-/* .no-break {
-	break-inside: avoid;
-	-webkit-column-break-inside: avoid;
-	page-break-inside: avoid;
-} */
 
 /* Inputs & buttons */
 input {
