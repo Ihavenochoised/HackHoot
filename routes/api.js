@@ -35,14 +35,40 @@ const browserLoaded = (async () => {
         browser = await puppeteer.launch({
             headless: 'new',
             args: [
+                '--headless',
+                '--disable-gpu',
                 '--no-sandbox',
-                '--disable-web-security',
-                '--disable-setuid-sandbox',
                 '--disable-dev-shm-usage',
                 '--disable-extensions',
-                '--disable-gpu',
-                '--single-process',
-                '--no-zygote',
+                '--disable-background-timer-throttling',
+                '--disable-renderer-backgrounding',
+                '--disable-software-rasterizer',
+                '--disable-accelerated-2d-canvas',
+                '--disable-accelerated-video-decode',
+                '--disable-accelerated-video-encode',
+                '--disable-webgl',
+                '--disable-threaded-animation',
+                '--disable-threaded-scrolling',
+                '--disable-composited-antialiasing',
+                '--disable-smooth-scrolling',
+                '--disable-translate',
+                '--disable-hang-monitor',
+                '--disable-popup-blocking',
+                '--disable-backgrounding-occluded-windows',
+                '--disk-cache-size=0',
+                '--media-cache-size=0',
+                '--mute-audio',
+                '--no-first-run',
+                '--no-default-browser-check',
+                '--disable-client-side-phishing-detection',
+                '--disable-component-update',
+                '--disable-background-networking',
+                '--disable-sync',
+                '--disable-notifications',
+                '--disable-infobars',
+                '--disable-breakpad',
+                '--metrics-recording-only',
+                '--safebrowsing-disable-auto-update'
             ]
         });
         console.log('✅ Browser successfully launched');
@@ -82,18 +108,18 @@ async function htmlToPDF(req, res) {
         return res.status(400).json({ error: 'No HTML content provided' });
     }
     console.log('HTML Content Recieved:', originalHTMLContent);
-    const emojiStylesheet = 
-    `<link rel="preconnect" href="https://fonts.googleapis.com">
+    const emojiStylesheet =
+        `<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">`;
-    const siteFontStylesheet = 
-    `<link rel="preconnect" href="https://fonts.googleapis.com">
+    const siteFontStylesheet =
+        `<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
-    const siteStylesheet = 
-    `<link rel="stylesheet" href="/stylesheets/style.css" />`;
+    const siteStylesheet =
+        `<link rel="stylesheet" href="/stylesheets/style.css" />`;
 
-    const modifiedHTMLContent = 
+    const modifiedHTMLContent =
         `<!DOCTYPE html>
             <html lang="en">
             <head>
