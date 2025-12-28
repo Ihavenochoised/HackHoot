@@ -1,5 +1,5 @@
 {
-  "name": "Hack Hoot",
+  "name": "hackhoot",
   "version": "1.0.0",
   "description": "Express app for Kahoot cheats. Enjoy!",
   "main": "index.js",
@@ -11,7 +11,8 @@
     "puppeteer": "^24.3.0"
   },
   "engines": {
-    "node": "latest"
+    "node": ">=24.12.0",
+    "npm": ">=11.6.2"
   },
   "type": "module",
   "author": "DAXIONGMAO",
