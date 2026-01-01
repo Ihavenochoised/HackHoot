@@ -152,8 +152,9 @@ async function htmlToPDF(req, res) {
 
         const pdfBuffer = await page.pdf({
             printBackground: true,
-            width: `${Math.ceil(width)}px`,
-            height: `${Math.ceil(height) + 60}px`,
+            width: '210mm',
+            margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
+            height: `${Math.ceil(height) + 100}px`, 
             pageRanges: '1',
         });
 
