@@ -39,7 +39,12 @@ span {
 }
 
 .emoji {
-	font-family: 'Noto Color Emoji' !important;
+	font-family: 'Noto Color Emoji'; 
+	background-clip: unset;            /* reset clipping */
+	-webkit-background-clip: unset;    /* reset clipping */
+	-webkit-text-fill-color: initial;  /* restore emoji color */
+	background: initial; 		   	   /* reset background */
+	color: initial;  			       /* restore emoji color */
 }
 
 /* Containers */
