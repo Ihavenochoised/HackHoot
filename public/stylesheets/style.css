@@ -75,6 +75,10 @@ div {
 	margin: 0 !important;
 }
 
+.center {
+	text-align: center;
+}
+
 /* Inputs & buttons */
 input {
 	font-size: large;
