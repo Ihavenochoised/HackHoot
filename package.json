@@ -4,7 +4,8 @@
   "description": "Express app for Kahoot cheats. Enjoy!",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "redeploy": "node renderRedeploy.js"
   },
   "dependencies": {
     "express": "^4.18.2",
