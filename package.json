@@ -12,8 +12,8 @@
     "puppeteer": "^24.3.0"
   },
   "engines": {
-    "node": ">=24.12.0",
-    "npm": ">=11.6.2"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "type": "module",
   "author": "DAXIONGMAO",
