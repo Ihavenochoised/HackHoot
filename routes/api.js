@@ -58,13 +58,13 @@ async function proxyRequest(req, res) {
         const externalApiURL = 'https://kahoot.it/rest/kahoots/';
         const externalApiResponse = await fetch(externalApiURL + UUID);
         if (!externalApiResponse.ok) {
-            throw new Error(`External API returned error: ${externalApiResponse.statusText}`);
+            throw new Error(`External API returned error: ${externalApiResponse.statusText}, with response of ${await externalApiResponse.text()}`);
         }
         const responseBody = await externalApiResponse.json();
         res.status(externalApiResponse.status).json(responseBody);
     } catch (err) {
         console.error('Error in proxy route:', err);
-        res.status(500).json({ error: 'Proxy request failed' });
+        res.status(500).json({ error: 'Proxy request failed, ' + err.message });
     }
 }
 
