@@ -32,8 +32,16 @@ let browser;
 const browserLoaded = (async () => {
     try {
         console.log('⚠️ Launching browser early...');
+        const { execSync } = await import('child_process');
+        let executablePath;
+        try {
+            executablePath = execSync('which chromium', { encoding: 'utf8' }).trim();
+        } catch (e) {
+            executablePath = undefined;
+        }
         browser = await puppeteer.launch({
-            headless: 'new',
+            headless: true,
+            executablePath,
             args: [
                 '--headless',
                 '--disable-gpu',
