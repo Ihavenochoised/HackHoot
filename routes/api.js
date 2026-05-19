@@ -1,56 +1,40 @@
-import express from 'express';
+import express from "express";
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.json({ message: 'Welcome to the API 🚀' });
+router.get("/", (req, res) => {
+    res.json({ message: "Welcome to the API 🚀" });
 });
 
-router.get('/status', (req, res) => {
-    res.json({ uptime: process.uptime(), status: 'OK', time: new Date() });
+router.get("/status", (req, res) => {
+    res.json({ uptime: process.uptime(), status: "OK", time: new Date() });
 });
 
-router.post('/kahoot-proxy', (req, res) => {
-    console.log('Request body:', req.body);
+router.post("/kahoot-proxy", (req, res) => {
+    console.log("Request body:", req.body);
     proxyRequest(req, res);
 });
 
-router.post('/convert-pdf', (req, res) => {
+router.post("/convert-pdf", (req, res) => {
     htmlToPDF(req, res);
 });
 
-router.post('/browser-pages', (req, res) => {
+router.post("/browser-pages", (req, res) => {
     getBrowserPages(req, res);
-})
+});
 // Implement a key later
 
 // ------------- API FUNCTIONS -------------
 
-import puppeteer from 'puppeteer';
+import puppeteer from "puppeteer";
+import resolveLaunchOptions from "../services/launchParams.js"
 
 let browser;
 const browserLoaded = (async () => {
     try {
-        console.log('⚠️ Launching browser early...');
-        const { execSync } = await import('child_process');
-        let executablePath;
-        try {
-            executablePath = execSync('which chromium', { encoding: 'utf8' }).trim();
-        } catch (e) {
-            executablePath = undefined;
-        }
-        browser = await puppeteer.launch({
-            headless: true,
-            executablePath,
-            args: [
-                '--headless',
-                '--disable-gpu',
-                '--no-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-extensions'
-            ]
-        });
-        console.log('✅ Browser successfully launched');
+        let optns = await resolveLaunchOptions();
+        browser = await puppeteer.launch(optns);
+        console.log("✅ Browser successfully launched");
         return true;
     } catch (err) {
         console.error(`❌ Fatal error, browser did not launch. Error:`, err);
@@ -61,45 +45,48 @@ const browserLoaded = (async () => {
 async function proxyRequest(req, res) {
     try {
         const { UUID } = req.body;
-        if (!UUID) return res.status(400).json({ error: "missing UUID in body" });
+        if (!UUID)
+            return res.status(400).json({ error: "missing UUID in body" });
 
-        const externalApiURL = 'https://kahoot.it/rest/kahoots/';
+        const externalApiURL = "https://kahoot.it/rest/kahoots/";
         const externalApiResponse = await fetch(externalApiURL + UUID);
         if (!externalApiResponse.ok) {
-            throw new Error(`External API returned error: ${externalApiResponse.statusText}, with response of ${await externalApiResponse.text()}`);
+            throw new Error(
+                `External API returned error: ${externalApiResponse.statusText}, with response of ${await externalApiResponse.text()}`,
+            );
         }
         const responseBody = await externalApiResponse.json();
         res.status(externalApiResponse.status).json(responseBody);
     } catch (err) {
-        console.error('Error in proxy route:', err);
-        res.status(500).json({ error: 'Proxy request failed, ' + err.message });
+        console.error("Error in proxy route:", err);
+        res.status(500).json({ error: "Proxy request failed, " + err.message });
     }
 }
 
 async function htmlToPDF(req, res) {
     const browserReady = await browserLoaded;
     if (!browserReady) {
-        console.log('⛔ Browser has not launched, failing the request to /api/convert-pdf');
-        return res.status(503).json({ error: 'The PDF generation service is not ready' });
+        console.log(
+            "⛔ Browser has not launched, failing the request to /api/convert-pdf",
+        );
+        return res
+            .status(503)
+            .json({ error: "The PDF generation service is not ready" });
     }
     const { htmlContent: originalHTMLContent } = req.body;
     if (!originalHTMLContent) {
-        return res.status(400).json({ error: 'No HTML content provided' });
+        return res.status(400).json({ error: "No HTML content provided" });
     }
-    console.log('HTML Content Recieved:', originalHTMLContent);
-    const emojiStylesheet =
-        `<link rel="preconnect" href="https://fonts.googleapis.com">
+    console.log("HTML Content Recieved:", originalHTMLContent);
+    const emojiStylesheet = `<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">`;
-    const siteFontStylesheet =
-        `<link rel="preconnect" href="https://fonts.googleapis.com">
+    const siteFontStylesheet = `<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
-    const siteStylesheet =
-        `<link rel="stylesheet" href="/stylesheets/style.css" />`;
+    const siteStylesheet = `<link rel="stylesheet" href="/stylesheets/style.css" />`;
 
-    const modifiedHTMLContent =
-        `<!DOCTYPE html>
+    const modifiedHTMLContent = `<!DOCTYPE html>
             <html lang="en">
             <head>
                 ${emojiStylesheet}
@@ -109,13 +96,13 @@ async function htmlToPDF(req, res) {
             <body>
                 ${originalHTMLContent}
             </body>
-        </html>`
+        </html>`;
 
-    console.log('Modified HTML Content:', modifiedHTMLContent);
+    console.log("Modified HTML Content:", modifiedHTMLContent);
     try {
         const page = await browser.newPage();
         await page.goto(`http://localhost:${globalThis.PORT}`, {
-            waitUntil: 'load'
+            waitUntil: "load",
         });
         await page.evaluate(async (html) => {
             document.documentElement.innerHTML = html;
@@ -123,43 +110,48 @@ async function htmlToPDF(req, res) {
             //await new Promise(resolve => setTimeout(resolve, 1000));
         }, modifiedHTMLContent);
 
-        const bodyHandle = await page.$('body');
+        const bodyHandle = await page.$("body");
         const { width, height } = await bodyHandle.boundingBox();
         await bodyHandle.dispose();
 
-        await page.setViewport({ width: Math.ceil(width), height: Math.ceil(height) });
+        await page.setViewport({
+            width: Math.ceil(width),
+            height: Math.ceil(height),
+        });
 
         const pdfBuffer = await page.pdf({
             printBackground: true,
-            width: '210mm',
-            margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
-            height: `${Math.ceil(height) + 100}px`, 
-            pageRanges: '1',
+            width: "210mm",
+            margin: { top: "1cm", right: "1cm", bottom: "1cm", left: "1cm" },
+            height: `${Math.ceil(height) + 100}px`,
+            pageRanges: "1",
         });
 
         await page.close();
 
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Length', pdfBuffer.length);
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Length", pdfBuffer.length);
         res.end(pdfBuffer);
     } catch (error) {
-        console.error('Error generating PDF:', error);
-        res.status(500).json({ error: 'Failed to generate PDF' });
+        console.error("Error generating PDF:", error);
+        res.status(500).json({ error: "Failed to generate PDF" });
     }
 }
 
 async function getBrowserPages(req, res) {
     const browserReady = await browserLoaded;
     if (!browserReady) {
-        console.log('⛔ Browser has not launched, failing the request to /api/browser-pages');
-        return res.status(503).json({ error: 'The browser has not launched' });
+        console.log(
+            "⛔ Browser has not launched, failing the request to /api/browser-pages",
+        );
+        return res.status(503).json({ error: "The browser has not launched" });
     }
     const pages = await browser.pages();
     const pageObjects = await Promise.all(
         pages.map(async (page) => ({
             url: page.url(),
-            title: await page.title()
-        }))
+            title: await page.title(),
+        })),
     );
     res.json(pageObjects);
 }
