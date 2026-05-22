@@ -30,7 +30,8 @@ downloadPDFBtn.addEventListener('click', function () {
 });
 start.addEventListener('click', getAnswers);
 
-input.value = 'd4112b19-199b-46a8-93ab-9dc87619fb37';
+// Example Kahoot I found on Kahoot homepage
+input.value = 'd4112b19-199b-46a8-93ab-9dc87619fb37'; 
 
 function checkReady() {
 	console.log(document.readyState);
