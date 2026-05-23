@@ -102,12 +102,12 @@ async function htmlToPDF(req, res) {
     try {
         const page = await browser.newPage();
         await page.goto(`http://localhost:${globalThis.PORT}`, {
-            waitUntil: "load",
+            waitUntil: "networkidle0",
         });
         await page.evaluate(async (html) => {
             document.documentElement.innerHTML = html;
             await document.fonts.ready;
-            //await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
         }, modifiedHTMLContent);
 
         const bodyHandle = await page.$("body");
@@ -119,6 +119,9 @@ async function htmlToPDF(req, res) {
             height: Math.ceil(height),
         });
 
+        // Force Chromium to render everything normally
+        await page.emulateMediaType('screen');
+        
         const pdfBuffer = await page.pdf({
             printBackground: true,
             width: "210mm",
@@ -126,6 +129,15 @@ async function htmlToPDF(req, res) {
             height: `${Math.ceil(height) + 100}px`,
             pageRanges: "1",
         });
+
+        // Todo: Maybe allow the frontend to increase page rendering quality: 
+        /*
+        await page.setViewport({
+            width: 1920,
+            height: 1080,
+            deviceScaleFactor: 2   <-- Try this, increase if needed
+        });
+        */
 
         await page.close();
 
@@ -156,13 +168,24 @@ async function getBrowserPages(req, res) {
     res.json(pageObjects);
 }
 
-function joinKahoot() {
-    // Implement functionality
+// ------------- KAHOOT FUNCTIONS -------------
+
+/*
+Work in progress
+
+import Kahoot from "kahoot.js-latest";
+
+function joinKahoot(join_code, name, suffix = '', number) {
+    const client = new Kahoot();
+    if (!/^\d+$/.test(String(join_code))) {
+        throw new Error("Join code must be numeric");
+    }
+    client.join(Number(join_code), )
 }
 
 function leaveKahoot() {
     // Implement functionality
-}
+}*/
 
 // -----------------------------------------
 
