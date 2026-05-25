@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "puppeteer": "^24.3.0",
+    "puppeteer": "^24.37.5",
     "dotenv": "^17.3.1",
     "kahoot.js-latest": "^1.0.9"
   },
