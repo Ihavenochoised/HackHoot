@@ -10,7 +10,11 @@ async function resolveLaunchOptions() {
         return {
             executablePath: stdout.trim(),
             headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+            args: [
+                '--no-sandbox', 
+                '--disable-setuid-sandbox', 
+                '--disable-gpu'
+            ],
         };
     } else if (runtime === 'render') {
         return {
