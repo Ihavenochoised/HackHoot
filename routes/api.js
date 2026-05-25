@@ -85,7 +85,6 @@ async function htmlToPDF(req, res) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">`;
     const siteStylesheet = `<link rel="stylesheet" href="/stylesheets/style.css" />`;
-
     const modifiedHTMLContent = `<!DOCTYPE html>
             <html lang="en">
             <head>
@@ -97,50 +96,49 @@ async function htmlToPDF(req, res) {
                 ${originalHTMLContent}
             </body>
         </html>`;
-
     console.log("Modified HTML Content:", modifiedHTMLContent);
     try {
+        let scaleFactor = 2; // Allows you to add a PDF quality slider later
         const page = await browser.newPage();
         await page.goto(`http://localhost:${globalThis.PORT}`, {
             waitUntil: "networkidle0",
         });
+        /* 
+            So apparently Chromium's PDF generation is a bit buggy, so we need to render the HTML to an image first, then render that image to a PDF.
+            Sadly we lose the ability to have selectable text in the PDF, but it's a small price to pay for a working PDF.
+            Hope no one notices 😉
+        */
         await page.evaluate(async (html) => {
             document.documentElement.innerHTML = html;
             await document.fonts.ready;
             await new Promise(resolve => setTimeout(resolve, 1000));
         }, modifiedHTMLContent);
-
-        const bodyHandle = await page.$("body");
+        const bodyHandle = await page.$('body'); 
         const { width, height } = await bodyHandle.boundingBox();
-        await bodyHandle.dispose();
-
+        const paddingBuffer = 20; 
+        const finalWidth = Math.ceil(width) + (paddingBuffer * scaleFactor);
+        const finalHeight = Math.ceil(height) + (paddingBuffer * scaleFactor);
         await page.setViewport({
-            width: Math.ceil(width),
-            height: Math.ceil(height),
+            width: finalWidth,
+            height: finalHeight,
+            deviceScaleFactor: scaleFactor
         });
-
-        // Force Chromium to render everything normally
-        await page.emulateMediaType('screen');
-        
+        const screenshotBuffer = await page.screenshot({ encoding: "base64" }); 
+        await bodyHandle.dispose();
+        const imgHtml = `
+          <html>
+            <body style="margin: 0; padding: 0; background: white; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+              <img src="data:image/png;base64,${screenshotBuffer}" style="max-width: 100%; max-height: 100%; object-fit: contain; display: block;" />
+            </body>
+          </html>
+        `;
+        await page.setContent(imgHtml);
         const pdfBuffer = await page.pdf({
             printBackground: true,
-            width: "210mm",
-            margin: { top: "1cm", right: "1cm", bottom: "1cm", left: "1cm" },
-            height: `${Math.ceil(height) + 100}px`,
-            pageRanges: "1",
+            width: "210mm", 
+            height: `${finalHeight + 20}px`, 
+            margin: { top: "1cm", right: "1cm", bottom: "1cm", left: "1cm" }
         });
-
-        // Todo: Maybe allow the frontend to increase page rendering quality: 
-        /*
-        await page.setViewport({
-            width: 1920,
-            height: 1080,
-            deviceScaleFactor: 2   <-- Try this, increase if needed
-        });
-        */
-
-        await page.close();
-
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Length", pdfBuffer.length);
         res.end(pdfBuffer);
