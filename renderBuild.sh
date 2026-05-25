@@ -14,7 +14,7 @@ if [[ -d "$BUILD_CACHE_DIR" ]]; then
   cp -R "$BUILD_CACHE_DIR" "$PUPPETEER_CACHE_DIR"
 else
   echo "🧩 Downloading fresh Puppeteer Chromium..."
-  npm rebuild puppeteer
+  #npm rebuild puppeteer
   echo "💾 Saving Puppeteer cache for next build..."
   mkdir -p "$(dirname $BUILD_CACHE_DIR)"
   cp -R "$PUPPETEER_CACHE_DIR" "$BUILD_CACHE_DIR"
