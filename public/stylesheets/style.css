@@ -1,16 +1,16 @@
 * {
-	border-radius: 10px;
-	font-family: 'Luckiest Guy', sans-serif;
-	-webkit-tap-highlight-color: transparent;
-	box-sizing: border-box;
+    border-radius: 10px;
+    font-family: 'Luckiest Guy', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
 }
 
 body {
-	border-radius: 0 !important;
+    border-radius: 0 !important;
 }
 
 body::-webkit-scrollbar {
-	display: none;
+    display: none;
 }
 
 /* Headings & text */
@@ -19,120 +19,127 @@ h2,
 h3,
 h4,
 p {
-	text-align: center;
+    text-align: center;
 }
 
 span {
-	background-image: linear-gradient(0deg, #243ae7, #0875ea);
-	background-clip: text;
-	-webkit-background-clip: text;
-	color: transparent;
-	border-radius: 0 !important;
+    background-image: linear-gradient(0deg, #243ae7, #0875ea);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    border-radius: 0 !important;
 }
 
 #seperator {
-	background-image: linear-gradient(90deg, #9ca3af, #6b7280);
-	width: 15rem;
-	height: 0.25rem;
-	padding: 0;
-	margin: 20px auto;
+    background-image: linear-gradient(90deg, #9ca3af, #6b7280);
+    width: 15rem;
+    height: 0.25rem;
+    padding: 0;
+    margin: 20px auto;
 }
 
 .emoji {
-	font-family: 'Noto Color Emoji'; 
-	background-clip: unset;            /* reset clipping */
-	-webkit-background-clip: unset;    /* reset clipping */
-	-webkit-text-fill-color: initial;  /* restore emoji color */
-	background: initial; 		   	   /* reset background */
-	color: initial;  			       /* restore emoji color */
+    font-family: 'Noto Color Emoji';
+    background-clip: unset;
+    /* reset clipping */
+    -webkit-background-clip: unset;
+    /* reset clipping */
+    -webkit-text-fill-color: initial;
+    /* restore emoji color */
+    background: initial;
+    /* reset background */
+    color: initial;
+    /* restore emoji color */
 }
 
 /* Containers */
 div {
-	border: 2px solid #e2e8f0;
-	margin: auto;
-	padding: 30px;
-	box-shadow: 3px 3px #6b7280;
+    border: 2px solid #e2e8f0;
+    margin: auto;
+    padding: 30px;
+    box-shadow: 3px 3px #6b7280;
 }
 
 .flex {
-	border-style: hidden !important;
-	display: flex;
-	justify-content: center;
-	margin: 25px auto;
-	padding: 0;
-	box-shadow: none !important;
+    border-style: hidden !important;
+    display: flex;
+    justify-content: center;
+    margin: 25px auto;
+    padding: 0;
+    box-shadow: none !important;
 }
 
 .mainContainer {
-	margin: 1lh auto 1lh auto;
+    margin: 1lh auto 1lh auto;
 }
 
 .warning {
-	border-style: none !important;
-	box-shadow: none !important;
-	background-color: #FFD166;
-	padding: 10px !important;
-	color: #ffffff;
+    border-style: none !important;
+    box-shadow: none !important;
+    background-color: #FFD166;
+    padding: 10px !important;
+    color: #ffffff;
 }
 
 .warning * {
-	margin: 0 !important;
+    margin: 0 !important;
 }
 
 .center {
-	text-align: center;
+    text-align: center;
 }
 
 /* Inputs & buttons */
 input {
-	font-size: large;
-	padding: 10px;
-	width: 100%;
-	box-shadow: 3px 3px #6b7280;
-	border: #6b7280 solid;
-	height: 50px;
+    font-size: large;
+    padding: 10px;
+    width: 100%;
+    box-shadow: 3px 3px #6b7280;
+    border: #6b7280 solid;
+    height: 50px;
 }
 
 .btn-disabled {
-	background-image: linear-gradient(90deg, #9ca3af, #6b7280);
-	cursor: no-drop;
+    background-image: linear-gradient(90deg, #9ca3af, #6b7280);
+    cursor: no-drop;
 }
 
 .underline {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 button {
-	background-image: linear-gradient(0deg, #243ae7, #0875ea);
-	color: #ffffff;
-	padding: 10px;
-	font-size: large;
-	width: 100%;
-	box-shadow: 3px 3px #6b7280;
-	position: relative;
-	overflow: hidden;
-	cursor: pointer;
-	border: none;
-	height: 50px;
+    background-image: linear-gradient(0deg, #243ae7, #0875ea);
+    color: #ffffff;
+    padding: 10px;
+    font-size: large;
+    width: 100%;
+    box-shadow: 3px 3px #6b7280;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+    height: 50px;
 }
 
 a {
-	text-decoration: none;
-	color: #243ae7;
-	cursor: pointer;
+    text-decoration: none;
+    color: #243ae7;
+    cursor: pointer;
 }
 
 /* Media */
 img {
-	max-width: 100%;
-	height: 40px;
-	box-shadow: 3px 3px #6b7280;
+    max-width: 100%;
+    height: 40px;
+    box-shadow: 3px 3px #6b7280;
 }
 
 /* Responsive styling (currently empty for small breakpoints) */
-@media (min-width: 961px), (min-width: 1025px), (min-width: 1281px) {
-	div {
-		max-width: 70%;
-	}
+@media (min-width: 961px),
+(min-width: 1025px),
+(min-width: 1281px) {
+    div {
+        max-width: 70%;
+    }
 }
