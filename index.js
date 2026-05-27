@@ -57,3 +57,4 @@ async function shutdown() {
 
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
+process.on("SIGHUP", shutdown)

@@ -15,18 +15,32 @@ async function resolveLaunchOptions() {
                 '--disable-setuid-sandbox', 
                 '--disable-gpu'
             ],
+            handleSIGINT: false,
+            handleSIGTERM: false,
+            handleSIGHUP: false
         };
     } else if (runtime === 'render') {
         return {
             headless: 'new',
             args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+            handleSIGINT: false,
+            handleSIGTERM: false,
+            handleSIGHUP: false
         };
     } else if (runtime === 'windows') {
         return {
             headless: 'new',
+            handleSIGINT: false,
+            handleSIGTERM: false,
+            handleSIGHUP: false
         };
     }
-    return { headless: 'new' };
+    return { 
+        headless: 'new',
+        handleSIGINT: false,
+        handleSIGTERM: false,
+        handleSIGHUP: false
+    };
 }
 
 export default resolveLaunchOptions;
