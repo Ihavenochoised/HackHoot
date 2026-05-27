@@ -229,21 +229,22 @@ let shuttingDown = false;
 async function cleanup() {
     if (shuttingDown) return;
     shuttingDown = true;
-    console.log("🛑 Shutdown triggered... waiting for processes to settle");
-    await new Promise(r => setTimeout(r, 300));
+    console.log("🛑 Shutdown triggered");
     try {
-        if (!browser) return;
-        if (!browser.connected) {
-            console.log("Browser already dead");
+        if (!browser) {
+            console.log("[puppeteer] No browser instance found");
             return;
         }
-        console.log("[puppeteer] Closing browser...");
+        if (!browser.connected) {
+            console.log("[puppeteer] Browser already dead");
+            return;
+        }
+        console.log("[puppeteer] Closing browser...\n");
         await browser.close();
-        console.log("[puppeteer] Browser closed.");
+        // console.log("[puppeteer] Told browser to close, check if it closed successfully...");
     } catch (err) {
-        console.log("[puppeteer] Cleanup skipped (browser already gone)");
-    }
-    console.log("[puppeteer] Cleanup complete, exiting now.");
+        console.log("[puppeteer] Cleanup skipped:", err.message);
+    } 
 }
 
 export { cleanup };

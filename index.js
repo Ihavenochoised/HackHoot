@@ -1,6 +1,9 @@
 // Inject environment variables
 import 'dotenv/config';
 
+// Prevent stdout buffering to ensure logs are printed immediately
+process.stdout.write = process.stdout.write.bind(process.stdout);
+
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -39,20 +42,22 @@ async function checkReachable(url) {
     }
 }
 
+function wait(ms) {
+    return new Promise(r => setTimeout(r, ms));
+}
+
 // Run checks at startup
 checkReachable("https://fonts.gstatic.com");
 checkReachable("https://fonts.googleapis.com");
 
 // Shutdown the server gracefully
-let shuttingDown = false;
-
 async function shutdown() {
-    if (shuttingDown) return;
-    shuttingDown = true;
     console.log("\n🛑 Shutting down server...");
-    await cleanup();
-    console.log("\n🛑 Server shutdown complete.")
-    process.exit(0);
+    try {
+        await cleanup(); 
+    } finally {
+        process.exit(0);
+    }
 }
 
 process.on("SIGINT", shutdown);
