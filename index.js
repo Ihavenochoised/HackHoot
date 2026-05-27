@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import pageRouter from "./routes/routes.js";
 import apiRouter from "./routes/api.js";
+import { cleanup } from "./routes/api.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -41,3 +42,18 @@ async function checkReachable(url) {
 // Run checks at startup
 checkReachable("https://fonts.gstatic.com");
 checkReachable("https://fonts.googleapis.com");
+
+// Shutdown the server gracefully
+let shuttingDown = false;
+
+async function shutdown() {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    console.log("\n🛑 Shutting down server...");
+    await cleanup();
+    console.log("\n🛑 Server shutdown complete.")
+    process.exit(0);
+}
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);

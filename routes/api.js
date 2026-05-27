@@ -11,7 +11,6 @@ router.get("/status", (req, res) => {
 });
 
 router.post("/kahoot-proxy", (req, res) => {
-    console.log("Request body:", req.body);
     proxyRequest(req, res);
 });
 
@@ -23,6 +22,20 @@ router.post("/browser-pages", (req, res) => {
     getBrowserPages(req, res);
 });
 // Implement a key later
+
+// Work in progress
+// router.post("/reqjoin", (req, res) => {
+//     console.log("[kahoot_bot] Request body:", req.body);
+//     const { quizId, botName, botAmount } = req.body;
+//     startBotting(quizId, botName, botAmount);
+// });
+
+// router.post("/kahoot2fa", (req, res) => {
+//     // In case the above path fails because of Kahoot's 2FA
+//     // We'll try the 2FA code the user provides
+//     const { quizId, botName, botAmount, auth2fa } = req.body;
+//     startBotting(quizId, botName, botAmount, auth2fa);
+// })
 
 // ------------- API FUNCTIONS -------------
 
@@ -57,6 +70,9 @@ async function proxyRequest(req, res) {
         }
         const responseBody = await externalApiResponse.json();
         res.status(externalApiResponse.status).json(responseBody);
+        let quizName = responseBody.title;
+        let quizURL = externalApiURL + UUID;
+        console.log(`[kahoot_proxy] Kahoot fetched: ${quizName}, ${quizURL}`);
     } catch (err) {
         console.error("Error in proxy route:", err);
         res.status(500).json({ error: "Proxy request failed, " + err.message });
@@ -111,7 +127,6 @@ async function htmlToPDF(req, res) {
         await page.evaluate(async (html) => {
             document.documentElement.innerHTML = html;
             await document.fonts.ready;
-            await new Promise(resolve => setTimeout(resolve, 1000));
         }, modifiedHTMLContent);
         const bodyHandle = await page.$('body'); 
         const { width, height } = await bodyHandle.boundingBox();
@@ -169,23 +184,68 @@ async function getBrowserPages(req, res) {
 
 // ------------- KAHOOT FUNCTIONS -------------
 
-/*
-Work in progress
+// Work in progress
+// import Kahoot from "kahoot.js-latest";
 
-import Kahoot from "kahoot.js-latest";
+// function startBotting(quizId, botName, botAmount) {
+//     // May fail because of the 2FA
+//     for (let i = 0; i < botAmount; i++) {
+//         let botName_final = `${botName} ${i}`
+//         playKahoot(quizId, botName_final);
+//     }
+// }
 
-function joinKahoot(join_code, name, suffix = '', number) {
-    const client = new Kahoot();
-    if (!/^\d+$/.test(String(join_code))) {
-        throw new Error("Join code must be numeric");
-    }
-    client.join(Number(join_code), )
-}
+// function playKahoot(quizId, botName, auth2fa) {
+//     const client = new Kahoot();
+//     if (!/^\d+$/.test(String(quizId))) {
+//         throw new Error("Join code must be numeric");
+//     }
+//     client.join(Number(quizId), botName);
+//     client.on("2Step", () => {
+//         console.log("[kahoot_bot] 2FA Challenge Received!");
+//         // The server sends an array of numbers representing the sequence
+//         // (0: Red/Triangle, 1: Diamond/Blue, 2: Circle/Yellow, 3: Square/Green)
+//         console.log("[kahoot_bot] Required Steps:", steps);
+//         // 3. Respond to the 2FA challenge
+//         client.answer2Step(steps).then(() => {
+//             console.log("[kahoot_bot] 2FA solved successfully!");
+//         }).catch((err) => {
+//             console.error("[kahoot_bot] Failed to solve 2FA:", err);
+//         });
+//     });
+//     client.on("Joined", () => {
+//         console.log(`[kahoot_bot] ${botName} joined the Kahoot!`);
+//     });
+// }
 
-function leaveKahoot() {
-    // Implement functionality
-}*/
+// function leaveKahoot() {
+//     // Implement functionality
+// }
 
 // -----------------------------------------
+
+let shuttingDown = false;
+
+async function cleanup() {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    console.log("🛑 Shutdown triggered... waiting for processes to settle");
+    await new Promise(r => setTimeout(r, 300));
+    try {
+        if (!browser) return;
+        if (!browser.connected) {
+            console.log("Browser already dead");
+            return;
+        }
+        console.log("[puppeteer] Closing browser...");
+        await browser.close();
+        console.log("[puppeteer] Browser closed.");
+    } catch (err) {
+        console.log("[puppeteer] Cleanup skipped (browser already gone)");
+    }
+    console.log("[puppeteer] Cleanup complete, exiting now.");
+}
+
+export { cleanup };
 
 export default router;
