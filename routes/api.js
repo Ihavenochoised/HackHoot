@@ -139,6 +139,7 @@ async function htmlToPDF(req, res) {
             height: `${finalHeight + 20}px`, 
             margin: { top: "1cm", right: "1cm", bottom: "1cm", left: "1cm" }
         });
+        await page.close();
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Length", pdfBuffer.length);
         res.end(pdfBuffer);
