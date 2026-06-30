@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # Render redeploy file
 renderRedeploy.js
+
+# Session database
+database/
