@@ -8,6 +8,7 @@ import Database from 'better-sqlite3';
 import SQLiteStoreFactory from 'better-sqlite3-session-store';
 
 import { fileURLToPath } from 'node:url';
+import fs from 'node:fs';
 import path from 'node:path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -18,7 +19,7 @@ if (!fs.existsSync(databaseDir)) {
 
 const SQLiteStore = SQLiteStoreFactory(session);
 
-const db = new Database('./database/sessions.db');
+const db = new Database(path.join(databaseDir, 'sessions.db'));
 
 export const sessionMiddleware = session({
     store: new SQLiteStore({
