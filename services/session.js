@@ -7,6 +7,15 @@ import session from 'express-session';
 import Database from 'better-sqlite3';
 import SQLiteStoreFactory from 'better-sqlite3-session-store';
 
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const databaseDir = path.join(__dirname, 'database');
+if (!fs.existsSync(databaseDir)) {
+    fs.mkdirSync(databaseDir, { recursive: true });
+}
+
 const SQLiteStore = SQLiteStoreFactory(session);
 
 const db = new Database('./database/sessions.db');
