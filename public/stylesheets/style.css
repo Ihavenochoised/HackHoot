@@ -69,6 +69,10 @@ div {
     box-shadow: none !important;
 }
 
+.block {
+    display: block;
+}
+
 .mainContainer {
     margin: 1lh auto 1lh auto;
 }
